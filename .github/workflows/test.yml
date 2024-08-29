@@ -1,0 +1,22 @@
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  pr_commented:
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo trying to edit comment on PR $NUMBER $USER_ID $COMMENT_ID
+        env:
+          USER_ID: ${{ github.event.comment.user.login }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+          NUMBER: ${{ github.event.issue.number }}
+      - name: Update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          edit-mode: replace
+          comment-id: ${{github.event.comment.id}}
+          body: |
+            This pull request is automatically being deployed by Amplify Hosting ([learn more](https://aws.amazon.com/amplify/hosting/)).<br/><br/>Access this pull request here: https://pr-${{github.event.issue.number}}.example.com
