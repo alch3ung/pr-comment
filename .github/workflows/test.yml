@@ -14,9 +14,10 @@ jobs:
           COMMENT_ID: ${{ github.event.comment.id }}
           NUMBER: ${{ github.event.issue.number }}
       - name: Update comment
-        uses: peter-evans/create-or-update-comment@v3
+        uses: actions/github-script@v7
         with:
-          edit-mode: replace
-          comment-id: ${{github.event.comment.id}}
-          body: |
-            This pull request is automatically being deployed by Amplify Hosting ([learn more](https://aws.amazon.com/amplify/hosting/)).<br/><br/>Access this pull request here: https://pr-${{github.event.issue.number}}.example.com
+          script: |
+            github.rest.issues.updateComment({
+              comment_id: context.comment.id,
+              body: 'This pull request is automatically being deployed by Amplify Hosting ([learn more](https://aws.amazon.com/amplify/hosting/)).<br/><br/>Access this pull request here: https://pr-${{github.event.issue.number}}.example.com'
+            })
