@@ -16,6 +16,7 @@ jobs:
       - name: Update comment
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.issues.updateComment({
               comment_id: context.comment.id,
